@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <name>block.size</name>
+  <value>4096</value>
+  <description>Block size in bytes. Valid values are 1024, 2048, 4096.
+  This specifies the size of blocks in bytes. Valid block-size values
+  are powers of two from 1024 up to 65536.</description>
+</property>
+
+<property>
+  <name>inode.size</name>
+  <value>512</value>
+  <description>Specifies the size of each inode in bytes.
+  Default is 256 bytes. Must be a power of 2 and at least 128.</description>
+</property>
+
+<property>
+  <name>reserved.blocks.percentage</name>
+  <value>5</value>
+  <description>Specifies the percentage of the filesystem blocks
+  reserved for the super-user. Default is 5%.</description>
+</property>
+
+<property>
+  <name>journal.size</name>
+  <value>128M</value>
+  <description>Create a journal of the given size in megabytes.
+  The size must be between 1024 and 10240000 filesystem blocks.</description>
+</property>
+
+<property>
+  <name>filesystem.label</name>
+  <value>my_ext4_disk</value>
+  <description>Set the volume label for the filesystem.
+  The maximum length is 16 bytes.</description>
+</property>
+
+<property>
+  <name>filesystem.uuid</name>
+  <value>12345-abcd-6789</value>
+  <description>Set the universally unique identifier (UUID) of the filesystem.
+  The UUID must be in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  (8-4-4-4-12 hexadecimal digits).</description>
+</property>
+
+<property>
+  <name>inode.ratio</name>
+  <value>16384</value>
+  <description>Creates an inode for every bytes-per-inode bytes of space
+  on the disk. Default is 16384. Larger ratio means fewer inodes.</description>
+</property>
+
+<property>
+  <name>stride.size</name>
+  <value>abc</value>
+  <description>Configure the filesystem for a RAID array with stride-size
+  filesystem blocks. This is the number of blocks read or written to disk
+  before moving to the next disk. Must be a positive integer.</description>
+</property>
+
+<property>
+  <name>stripe.width</name>
+  <value>64</value>
+  <description>Configure the filesystem for a RAID array with stripe-width
+  filesystem blocks per stripe. Typically stride * number_of_data_disks.</description>
+</property>
+
+<property>
+  <name>features.enabled</name>
+  <value>has_journal,extent,huge_file,flex_bg,64bit,dir_nlink</value>
+  <description>Filesystem features to enable. Common features include:
+  has_journal, extent, huge_file, flex_bg, 64bit, dir_nlink, extra_isize.</description>
+</property>
+
+<property>
+  <name>mount.options</name>
+  <value>defaults,noatime,nodiratime</value>
+  <description>Default mount options for the filesystem.
+  Common options: defaults, noatime, nodiratime, barrier=0.</description>
+</property>
+
+<property>
+  <name>root.directory.owner</name>
+  <value>root:root</value>
+  <description>Set the owner user:group for the root directory
+  of the filesystem.</description>
+</property>
+
+</configuration>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>features.enabled</n>
+  <value>has_jrnl,extnt,huge_file</value>
+  <description>Filesystem features to enable. Common features include:
+  has_journal, extent, huge_file, flex_bg, 64bit, dir_nlink.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["features.enabled"], "reason": ["Invalid feature names. 'has_jrnl' and 'extnt' are not valid ext4 features. Correct feature names are 'has_journal' and 'extent'."]}

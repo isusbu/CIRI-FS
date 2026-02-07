@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>filesystem.label</n>
+  <value>this_is_a_very_long_label_that_exceeds_limit</value>
+  <description>Set the volume label for the filesystem.
+  The maximum length is 16 bytes for ext4.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["filesystem.label"], "reason": ["Filesystem label too long. The value 'this_is_a_very_long_label_that_exceeds_limit' exceeds the maximum length of 16 characters for ext4 filesystem labels."]}

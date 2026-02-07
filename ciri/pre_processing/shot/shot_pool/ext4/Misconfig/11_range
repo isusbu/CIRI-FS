@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>inode.ratio</n>
+  <value>-1024</value>
+  <description>Creates an inode for every bytes-per-inode bytes of space.
+  Must be a positive integer, typically 8192, 16384, or higher.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["inode.ratio"], "reason": ["Value out of range. The value '-1024' is negative. Inode ratio must be a positive integer (typically 8192 or higher)."]}

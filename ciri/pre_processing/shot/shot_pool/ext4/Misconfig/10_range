@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>block.size</n>
+  <value>131072</value>
+  <description>Block size in bytes. Valid values are powers of two
+  from 1024 up to 65536.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["block.size"], "reason": ["Value out of range. The value '131072' exceeds the maximum allowed block size of 65536 bytes. Block size must be between 1024 and 65536."]}

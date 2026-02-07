@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>journal.size</n>
+  <value>128</value>
+  <description>Create a journal of the given size. The size should be
+  specified with a unit suffix (M for megabytes, e.g., 128M).</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["journal.size"], "reason": ["Invalid journal size format. The value '128' is missing the unit suffix. Journal size should be specified with a unit like 'M' for megabytes (e.g., '128M')."]}

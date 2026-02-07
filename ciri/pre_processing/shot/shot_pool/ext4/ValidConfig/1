@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>block.size</n>
+  <value>4096</value>
+  <description>Block size in bytes.</description>
+</property>
+
+<property>
+  <n>inode.size</n>
+  <value>256</value>
+  <description>Inode size in bytes.</description>
+</property>
+
+<property>
+  <n>reserved.blocks.percentage</n>
+  <value>5</value>
+  <description>Reserved blocks percentage.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": false, "errParameter": [], "reason": []}

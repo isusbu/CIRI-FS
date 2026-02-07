@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>root.directory.owner</n>
+  <value>root</value>
+  <description>Set the owner user:group for the root directory
+  of the filesystem. Format should be user:group.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["root.directory.owner"], "reason": ["Invalid owner format. The value 'root' is missing the group specification. Correct format is 'user:group' (e.g., 'root:root')."]}

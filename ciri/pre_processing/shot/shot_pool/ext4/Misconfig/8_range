@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>reserved.blocks.percentage</n>
+  <value>150</value>
+  <description>Specifies the percentage of the filesystem blocks
+  reserved for the super-user. Valid range is 0-50%.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["reserved.blocks.percentage"], "reason": ["Value out of range. The value '150' exceeds the maximum allowed percentage. Reserved blocks percentage must be between 0 and 50."]}

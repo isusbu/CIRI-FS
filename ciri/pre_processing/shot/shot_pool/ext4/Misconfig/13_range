@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>journal.size</n>
+  <value>102400M</value>
+  <description>Create a journal of the given size in megabytes.
+  Maximum journal size is typically around 10GB (10240M).</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["journal.size"], "reason": ["Value out of range. The value '102400M' (100GB) exceeds the maximum allowed journal size. Journal size should typically not exceed 10240M (10GB)."]}

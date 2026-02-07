@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>stride.size</n>
+  <value>16</value>
+  <description>RAID stride size.</description>
+</property>
+
+<property>
+  <n>stripe.width</n>
+  <value>64</value>
+  <description>RAID stripe width (stride * 4 data disks).</description>
+</property>
+
+<property>
+  <n>features.enabled</n>
+  <value>has_journal,extent,huge_file,flex_bg,64bit,metadata_csum</value>
+  <description>Enabled features with proper dependencies.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": false, "errParameter": [], "reason": []}

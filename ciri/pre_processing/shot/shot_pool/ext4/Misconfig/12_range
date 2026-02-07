@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>stride.size</n>
+  <value>0</value>
+  <description>Configure the filesystem for a RAID array with stride-size
+  filesystem blocks. Must be a positive integer greater than 0.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["stride.size"], "reason": ["Value out of range. The value '0' is invalid. Stride size must be a positive integer greater than 0 for RAID configurations."]}

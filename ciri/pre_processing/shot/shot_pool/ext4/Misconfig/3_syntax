@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>stride.size</n>
+  <value>abc</value>
+  <description>Configure the filesystem for a RAID array with stride-size
+  filesystem blocks. Must be a positive integer.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["stride.size"], "reason": ["Invalid data type. The value 'abc' is not a valid integer. stride.size must be a positive integer representing the number of filesystem blocks."]}

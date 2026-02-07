@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>filesystem.uuid</n>
+  <value>12345-abcd-6789</value>
+  <description>Set the universally unique identifier (UUID) of the filesystem.
+  The UUID must be in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  (8-4-4-4-12 hexadecimal digits).</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["filesystem.uuid"], "reason": ["Invalid UUID format. The value '12345-abcd-6789' does not follow the standard UUID format (8-4-4-4-12 hexadecimal digits). Correct format example: 550e8400-e29b-41d4-a716-446655440000"]}

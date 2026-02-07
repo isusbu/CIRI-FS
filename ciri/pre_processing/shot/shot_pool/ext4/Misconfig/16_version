@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>features.enabled</n>
+  <value>casefold,has_journal,extent</value>
+  <description>Filesystem features to enable. The casefold feature
+  (case-insensitive directory lookups) requires e2fsprogs 1.45.0+
+  and Linux kernel 5.2+.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.42.0?
+A: {"hasError": true, "errParameter": ["features.enabled"], "reason": ["Version incompatibility. The feature 'casefold' is not available in mkfs.ext4 version 1.42.0. This feature requires e2fsprogs version 1.45.0 or later. Please upgrade e2fsprogs or remove 'casefold' from the features list."]}

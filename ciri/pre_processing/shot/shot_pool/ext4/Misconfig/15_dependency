@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>features.enabled</n>
+  <value>metadata_csum,has_journal,extent</value>
+  <description>Filesystem features to enable. metadata_csum requires
+  the 64bit feature to be enabled.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["features.enabled"], "reason": ["Missing dependency. The feature 'metadata_csum' requires the '64bit' feature to be enabled. Add '64bit' to the features list: 'metadata_csum,has_journal,extent,64bit'."]}

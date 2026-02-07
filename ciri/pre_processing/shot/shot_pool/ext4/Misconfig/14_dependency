@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>stripe.width</n>
+  <value>64</value>
+  <description>Configure the filesystem for a RAID array with stripe-width
+  filesystem blocks per stripe. Requires stride.size to be set.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["stripe.width"], "reason": ["Missing dependency. The parameter 'stripe.width' is set but 'stride.size' is not configured. For RAID optimization, both stride.size and stripe.width must be specified together. stripe.width should equal stride.size multiplied by the number of data disks."]}

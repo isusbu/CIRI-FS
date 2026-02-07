@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>filesystem.uuid</n>
+  <value>550e8400-e29b-41d4-a716-446655440000</value>
+  <description>Filesystem UUID.</description>
+</property>
+
+<property>
+  <n>filesystem.label</n>
+  <value>my_data_disk</value>
+  <description>Filesystem label.</description>
+</property>
+
+<property>
+  <n>journal.size</n>
+  <value>128M</value>
+  <description>Journal size.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": false, "errParameter": [], "reason": []}

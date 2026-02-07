@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <n>inode.size</n>
+  <value>64</value>
+  <description>Specifies the size of each inode in bytes.
+  Must be a power of 2 and at least 128 bytes.</description>
+</property>
+
+</configuration>
+
+Q: Are there any mistakes in the above configuration for mkfs.ext4 version 1.47.0?
+A: {"hasError": true, "errParameter": ["inode.size"], "reason": ["Value out of range. The value '64' is below the minimum allowed inode size. Inode size must be at least 128 bytes and a power of 2."]}

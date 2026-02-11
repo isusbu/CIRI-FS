@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+<property>
+  <name>mkfs.ext4.block.size</name>
+  <value>1024</value>
+  <description>
+    Block size in bytes for the ext4 filesystem. Valid values are 1024, 2048, 
+    and 4096. Default is 4096. Larger block sizes can improve performance for 
+    large files but may waste space for small files.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.reserved.blocks.percentage</name>
+  <value>10</value>
+  <description>
+    Percentage of filesystem blocks reserved for the root user. Default is 5%. 
+    This prevents the filesystem from becoming completely full. Valid range is 
+    0-50. For production systems, 1-2% is often sufficient.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.stride</name>
+  <value>256</value>
+  <description>
+    Stride value for RAID optimization in blocks. Used when creating filesystem 
+    on RAID arrays. Default depends on RAID configuration. Stride should be set 
+    to (RAID chunk size / filesystem block size).
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.stripe.width</name>
+  <value>1024</value>
+  <description>
+    Stripe width for RAID optimization in blocks. Used in conjunction with stride 
+    for optimal RAID performance. Typically set to (number of data disks * stride).
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.filesystem.features</name>
+  <value>has_journal,extent</value>
+  <description>
+    Comma-separated list of ext4 features to enable. Common features include: 
+    has_journal (enables journaling), extent (uses extent-based storage), 
+    huge_file (supports files larger than 2TB), flex_bg (flexible block groups), 
+    and dir_index (hashed directory indexes).
+  </description>
+</property>
+
+</configuration>
+
+Question: Are there any mistakes in the above configuration file for ext4? Respond in a json format similar to the following:
+{
+    "hasError": boolean,
+    "errParameter": [],
+    "reason": []
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```

@@ -4,21 +4,53 @@
 <configuration>
 
 <property>
-  <n>stride.size</n>
-  <value>16</value>
-  <description>RAID stride size.</description>
+  <name>mkfs.ext4.block.size</name>
+  <value>2048</value>
+  <description>
+    Block size in bytes for the ext4 filesystem. Valid values are 1024, 2048, 
+    and 4096. Default is 4096. Larger block sizes can improve performance for 
+    large files but may waste space for small files.
+  </description>
 </property>
 
 <property>
-  <n>stripe.width</n>
+  <name>mkfs.ext4.inode.size</name>
+  <value>128</value>
+  <description>
+    Size of inode in bytes. Valid values are 128 and 256. Default is 256. 
+    Larger inode size allows extended attributes and improves compatibility 
+    with modern ext4 features.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.reserved.blocks.percentage</name>
+  <value>1</value>
+  <description>
+    Percentage of filesystem blocks reserved for the root user. Default is 5%. 
+    This prevents the filesystem from becoming completely full. Valid range is 
+    0-50. For production systems, 1-2% is often sufficient.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.lazy.initialization</name>
+  <value>false</value>
+  <description>
+    Enable lazy initialization of inode tables. Default is true. When enabled, 
+    inode tables are initialized in background, allowing faster filesystem 
+    creation. The filesystem is safe to use immediately.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.journal.size</name>
   <value>64</value>
-  <description>RAID stripe width (stride * 4 data disks).</description>
-</property>
-
-<property>
-  <n>features.enabled</n>
-  <value>has_journal,extent,huge_file,flex_bg,64bit,metadata_csum</value>
-  <description>Enabled features with proper dependencies.</description>
+  <description>
+    Size of the journal in megabytes. Valid range is 16-102400 MB. Default is 
+    automatically determined based on filesystem size. Larger journal provides 
+    better crash recovery but uses more space.
+  </description>
 </property>
 
 </configuration>

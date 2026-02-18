@@ -4,21 +4,53 @@
 <configuration>
 
 <property>
-  <n>block.size</n>
+  <name>mkfs.ext4.block.size</name>
   <value>4096</value>
-  <description>Block size in bytes.</description>
+  <description>
+    Block size in bytes for the ext4 filesystem. Valid values are 1024, 2048, 
+    and 4096. Default is 4096. Larger block sizes can improve performance for 
+    large files but may waste space for small files.
+  </description>
 </property>
 
 <property>
-  <n>inode.size</n>
+  <name>mkfs.ext4.inode.size</name>
   <value>256</value>
-  <description>Inode size in bytes.</description>
+  <description>
+    Size of inode in bytes. Valid values are 128 and 256. Default is 256. 
+    Larger inode size allows extended attributes and improves compatibility 
+    with modern ext4 features.
+  </description>
 </property>
 
 <property>
-  <n>reserved.blocks.percentage</n>
+  <name>mkfs.ext4.reserved.blocks.percentage</name>
   <value>5</value>
-  <description>Reserved blocks percentage.</description>
+  <description>
+    Percentage of filesystem blocks reserved for the root user. Default is 5%. 
+    This prevents the filesystem from becoming completely full. Valid range is 
+    0-50. For production systems, 1-2% is often sufficient.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.lazy.initialization</name>
+  <value>true</value>
+  <description>
+    Enable lazy initialization of inode tables. Default is true. When enabled, 
+    inode tables are initialized in background, allowing faster filesystem 
+    creation. The filesystem is safe to use immediately.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.stride</name>
+  <value>128</value>
+  <description>
+    Stride value for RAID optimization in blocks. Used when creating filesystem 
+    on RAID arrays. Default depends on RAID configuration. Stride should be set 
+    to (RAID chunk size / filesystem block size).
+  </description>
 </property>
 
 </configuration>

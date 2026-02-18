@@ -4,17 +4,28 @@
 <configuration>
 
 <property>
-  <name>mkfs.ext4.stripe.width</name>
-  <value>512</value>
+  <name>mkfs.ext4.inode.size</name>
+  <value>256</value>
   <description>
-    Stripe width for RAID optimization in blocks. Used in conjunction with stride 
-    for optimal RAID performance. Typically set to (number of data disks * stride).
+    Size of inode in bytes. Valid values are 128 and 256. Default is 256. 
+    Larger inode size allows extended attributes and improves compatibility 
+    with modern ext4 features.
+  </description>
+</property>
+
+<property>
+  <name>mkfs.ext4.lazy.initialization</name>
+  <value>true</value>
+  <description>
+    Enable lazy initialization of inode tables. Default is true. When enabled, 
+    inode tables are initialized in background, allowing faster filesystem 
+    creation. The filesystem is safe to use immediately.
   </description>
 </property>
 
 <property>
   <name>mkfs.ext4.journal.size</name>
-  <value>128</value>
+  <value>256</value>
   <description>
     Size of the journal in megabytes. Valid range is 16-102400 MB. Default is 
     automatically determined based on filesystem size. Larger journal provides 
@@ -24,7 +35,7 @@
 
 <property>
   <name>mkfs.ext4.filesystem.features</name>
-  <value>has_journal,extent,huge_file,flex_bg</value>
+  <value>has_journal,extent,huge_file,flex_bg,dir_index</value>
   <description>
     Comma-separated list of ext4 features to enable. Common features include: 
     has_journal (enables journaling), extent (uses extent-based storage), 
@@ -35,7 +46,7 @@
 
 <property>
   <name>mkfs.ext4.label</name>
-  <value>data</value>
+  <value>storage</value>
   <description>
     Optional filesystem label (name). Can be up to 16 characters. Used for 
     identification and mounting by label. Default is empty string.

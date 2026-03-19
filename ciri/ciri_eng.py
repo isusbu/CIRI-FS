@@ -110,15 +110,22 @@ def load_language_model(checkpoint: str) -> Tuple[Optional[AutoModelForCausalLM]
         logger.info(f"Using dtype: {dtype}")
 
         if checkpoint.startswith("deepseek"):
-            # Removed BitsAndBytesConfig (requires CUDA)
+            
             # Use device-aware device_map
             full_checkpoint = f"deepseek-ai/{checkpoint}"
             logger.info(f"Loading DeepSeek model: {full_checkpoint}")
-            
+            # updated using  BitsAndBytesConfig for making run in google colab
+            from transformers import BitsAndBytesConfig
+            quant_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_use_double_quant=True,
+            )
             model = AutoModelForCausalLM.from_pretrained(
                 full_checkpoint,
-                device_map="auto" if device == "cuda" else "cpu",
-                torch_dtype=dtype,
+                quantization_config=quant_config,
+                device_map="auto",
                 trust_remote_code=True
             )
             tokenizer = AutoTokenizer.from_pretrained(

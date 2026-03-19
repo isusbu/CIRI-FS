@@ -1,7 +1,6 @@
 import anthropic
 import openai
 import time
-import torch
 from openai import OpenAI
 from typing import Dict, List
 
@@ -23,13 +22,6 @@ Answer:
 ```json
 """
     return prompt
-
-
-def get_device() -> str:
-    """Auto-detect available device. Returns 'cuda' if GPU available, else 'cpu'."""
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    logger.info(f"[llm_gen] Using device: {device.upper()}")
-    return device
 
 
 class BaseGen:
@@ -90,14 +82,9 @@ class ClaudeGen(BaseGen):
         client = anthropic.Anthropic()
         while True:
             try:
-                response = client.messages.create(
-                    model=self.model,
-                    system="You are a helpful assistant.",
-                    messages=[{"role": "user", "content": message}],
-                    temperature=0.2,
-                    stop_sequences=["\n```\n"],
-                    max_tokens=512
-                )
+                response = client.messages.create(model=self.model, system="You are a helpful assistant.",
+                                                  messages=[{"role": "user", "content": message}],
+                                                  temperature=0.2, stop_sequences=["\n```\n"], max_tokens=512)
                 break
             except anthropic.RateLimitError as e:
                 print(f"Rate limit error: {e}")
@@ -108,69 +95,37 @@ class ClaudeGen(BaseGen):
 class LlamaGen(BaseGen):
     def __init__(self, args: Dict, config_file: str, model, tokenizer):
         super().__init__(args, config_file)
-        # Renamed to avoid overwriting self.model from BaseGen
-        self.llm_model = model
+        self.model = model
         self.tokenizer = tokenizer
-        # Auto-detect device instead of hardcoding cuda
-        self.device = get_device()
 
     def _generate(self) -> List:
         message = f"{self.config_file}\n{self.prompt}"
-        # Use self.device instead of hardcoded "cuda"
-        input_ids = self.tokenizer.encode(message, return_tensors="pt").to(self.device)
+        input_ids = self.tokenizer.encode(message, return_tensors="pt").to("cuda")
         input_len = len(input_ids[0])
-        outputs = self.llm_model.generate(
-            input_ids,
-            max_new_tokens=512,
-            do_sample=True,
-            temperature=0.2,
-            eos_token_id=28956
-        )
+        outputs = self.model.generate(input_ids, max_new_tokens=512, do_sample=True, temperature=0.2,
+                                      eos_token_id=28956)
         answerList = []
         for output in outputs:
             answerList.append(self.tokenizer.decode(output[input_len:-1], skip_special_tokens=True))
         return answerList
 
 
-# DeepseekGen must inherit from BaseGen (was missing entirely)
-class DeepseekGen(BaseGen):
+class DeepseekGen:
     def __init__(self, args: Dict, config_file: str, model, tokenizer):
-        # Now properly calls BaseGen.__init__
         super().__init__(args, config_file)
-        # Renamed to avoid overwriting self.model from BaseGen
-        self.llm_model = model
+        self.model = model
         self.tokenizer = tokenizer
-        # Auto-detect device instead of hardcoding cuda
-        self.device = get_device()
 
     def _generate(self) -> List:
         message = f"{self.config_file}\n{self.prompt}"
-        messages = [{'role': 'user', 'content': message}]
-
-        # Use tokenizer() after apply_chat_template to get correct tensor format
-        # apply_chat_template with tokenize=False returns a string first
-        # then tokenize it properly to avoid KeyError: 'shape'
-        formatted = self.tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        inputs = self.tokenizer(
-            formatted,
-            return_tensors="pt"
-        ).to(self.device)
-
-        # Use inputs["input_ids"].shape[1] for correct input length
-        input_len = inputs["input_ids"].shape[1]
-
-        # Use **inputs instead of just input_ids tensor
-        outputs = self.llm_model.generate(
-            **inputs,
-            max_new_tokens=512,
-            do_sample=True,
-            temperature=0.2,
-            eos_token_id=10252
-        )
+        messages = [
+            {'role': 'user', 'content': message}
+        ]
+        input_ids = self.tokenizer.apply_chat_template(messages, add_generation_prompt=False, return_tensors="pt").to(
+            "cuda")
+        input_len = len(input_ids[0])
+        outputs = self.model.generate(input_ids, max_new_tokens=512, do_sample=True, temperature=0.2,
+                                      eos_token_id=10252)
         answerList = []
         for output in outputs:
             answerList.append(self.tokenizer.decode(output[input_len:-1], skip_special_tokens=True))

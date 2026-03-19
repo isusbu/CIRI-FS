@@ -26,10 +26,7 @@ Answer:
 
 
 def get_device() -> str:
-    """
-    Auto-detect available device.
-    Returns 'cuda' if GPU is available, otherwise 'cpu'.
-    """
+    """Auto-detect available device. Returns 'cuda' if GPU available, else 'cpu'."""
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info(f"[llm_gen] Using device: {device.upper()}")
     return device
@@ -111,9 +108,10 @@ class ClaudeGen(BaseGen):
 class LlamaGen(BaseGen):
     def __init__(self, args: Dict, config_file: str, model, tokenizer):
         super().__init__(args, config_file)
+        # Renamed to avoid overwriting self.model from BaseGen
         self.llm_model = model
         self.tokenizer = tokenizer
-        # Auto-detect device instead of hardcoding CUDA
+        # Auto-detect device instead of hardcoding cuda
         self.device = get_device()
 
     def _generate(self) -> List:
@@ -134,30 +132,40 @@ class LlamaGen(BaseGen):
         return answerList
 
 
-# DeepseekGen must inherit from BaseGen ( this was missing inheritance entirely)
+# DeepseekGen must inherit from BaseGen (was missing entirely)
 class DeepseekGen(BaseGen):
     def __init__(self, args: Dict, config_file: str, model, tokenizer):
-        # Call BaseGen.__init__ properly now that we inherit from it
+        # Now properly calls BaseGen.__init__
         super().__init__(args, config_file)
+        # Renamed to avoid overwriting self.model from BaseGen
         self.llm_model = model
         self.tokenizer = tokenizer
-        #Auto-detect device instead of hardcoding CUDA
+        # Auto-detect device instead of hardcoding cuda
         self.device = get_device()
 
     def _generate(self) -> List:
         message = f"{self.config_file}\n{self.prompt}"
-        messages = [
-            {'role': 'user', 'content': message}
-        ]
-        #Use self.device instead of hardcoded "cuda"
-        input_ids = self.tokenizer.apply_chat_template(
+        messages = [{'role': 'user', 'content': message}]
+
+        # Use tokenizer() after apply_chat_template to get correct tensor format
+        # apply_chat_template with tokenize=False returns a string first
+        # then tokenize it properly to avoid KeyError: 'shape'
+        formatted = self.tokenizer.apply_chat_template(
             messages,
-            add_generation_prompt=False,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        inputs = self.tokenizer(
+            formatted,
             return_tensors="pt"
         ).to(self.device)
-        input_len = len(input_ids[0])
+
+        # Use inputs["input_ids"].shape[1] for correct input length
+        input_len = inputs["input_ids"].shape[1]
+
+        # Use **inputs instead of just input_ids tensor
         outputs = self.llm_model.generate(
-            input_ids,
+            **inputs,
             max_new_tokens=512,
             do_sample=True,
             temperature=0.2,

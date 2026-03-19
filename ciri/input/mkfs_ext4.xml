@@ -76,12 +76,6 @@
   has_journal, extent, huge_file, flex_bg, 64bit, dir_nlink, extra_isize.</description>
 </property>
 
-<property>
-  <name>mount.options</name>
-  <value>defaults,noatime,nodiratime</value>
-  <description>Default mount options for the filesystem.
-  Common options: defaults, noatime, nodiratime, barrier=0.</description>
-</property>
 
 <property>
   <name>root.directory.owner</name>

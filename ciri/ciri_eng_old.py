@@ -12,7 +12,6 @@ from ciri.ciri_logger import logger
 from ciri.ciri_runner import ciri_runner
 from ciri.pre_processing.shot.shot_selection import ShotSelection
 from ciri.pre_processing.code_retrieval.config_usage_retriever import ConfigUsageRetriever
-from ciri.pre_processing.code_retrieval.config_usage_retriever import ConfigUsageRetriever as InfoProvider
 
 class CiriEngineError(Exception):
     """Base exception class for Ciri Engine errors."""
@@ -78,7 +77,6 @@ def update_logger_handler(log_path: Union[str, Path]) -> None:
 def load_language_model(checkpoint: str) -> Tuple[Optional[AutoModelForCausalLM], Optional[AutoTokenizer]]:
     """
     Load the specified language model and tokenizer.
-    Supports both GPU (CUDA) and CPU execution.
     
     Args:
         checkpoint: Model checkpoint identifier
@@ -89,66 +87,44 @@ def load_language_model(checkpoint: str) -> Tuple[Optional[AutoModelForCausalLM]
     Raises:
         ModelLoadError: If model loading fails
     """
-    # API-based models 
-    if checkpoint in [
-        "gpt-3.5-turbo-0125",
-        "gpt-4-0125-preview",
-        "claude-3-opus-20240228",
-        "claude-3-sonnet-20240229"
-    ]:
+    if checkpoint in ["gpt-3.5-turbo-0125", "gpt-4-0125-preview"]:
         return None, None
 
     try:
-        # Detect device instead of requiring CUDA
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        
-        # Use of appropriate dtype for each device
-        # bfloat16 is optimal for GPU, float32 required for CPU
-        dtype = torch.bfloat16 if device == "cuda" else torch.float32
-        
-        logger.info(f"Using device: {device.upper()}")
-        logger.info(f"Using dtype: {dtype}")
-
-        if checkpoint.startswith("deepseek"):
-            # Removed BitsAndBytesConfig (requires CUDA)
-            # Use device-aware device_map
-            full_checkpoint = f"deepseek-ai/{checkpoint}"
-            logger.info(f"Loading DeepSeek model: {full_checkpoint}")
+        if not torch.cuda.is_available():
+            raise ModelLoadError("CUDA is not available for model loading")
             
+        if checkpoint.startswith("deepseek"):
+            checkpoint = f"deepseek-ai/{checkpoint}"
             model = AutoModelForCausalLM.from_pretrained(
-                full_checkpoint,
-                device_map="auto" if device == "cuda" else "cpu",
-                torch_dtype=dtype,
+                checkpoint,
+                device_map='auto',
+                torch_dtype=torch.bfloat16,
                 trust_remote_code=True
             )
             tokenizer = AutoTokenizer.from_pretrained(
-                full_checkpoint,
+                checkpoint, 
                 trust_remote_code=True,
                 padding_side='left'
             )
-
         elif checkpoint.startswith("CodeLLaMa"):
-            full_checkpoint = f"codellama/{checkpoint}"
-            logger.info(f"Loading CodeLlama model: {full_checkpoint}")
-            
+            checkpoint = f"codellama/{checkpoint}"
             model = AutoModelForCausalLM.from_pretrained(
-                full_checkpoint,
-                device_map="auto" if device == "cuda" else "cpu",
-                torch_dtype=dtype
+                checkpoint,
+                device_map='auto',
+                torch_dtype=torch.float16
             )
             tokenizer = AutoTokenizer.from_pretrained(
-                full_checkpoint,
+                checkpoint,
                 padding_side='left'
             )
-
         else:
             raise ValueError(f"Unsupported model checkpoint: {checkpoint}")
-
-        # Removed hardcoded model.to("cuda") — device_map handles placement
+            
+        model = model.to("cuda")
         model.eval()
-        logger.info(f"Model loaded successfully on {device.upper()}!")
         return model, tokenizer
-
+        
     except Exception as e:
         raise ModelLoadError(f"Failed to load model {checkpoint}: {str(e)}")
 
@@ -259,16 +235,10 @@ def parse_arguments() -> argparse.Namespace:
     required.add_argument("--output_path", required=True, type=str,
                          help="Path to output file or directory")
     required.add_argument("--model", required=True, type=str,
-                         choices=[
-                             "gpt-3.5-turbo-0125",
-                             "gpt-4-0125-preview",
-                             "claude-3-opus-20240228",
-                             "claude-3-sonnet-20240229",
-                             "CodeLLaMa-7b-Instruct-hf",
-                             "CodeLLaMa-13b-Instruct-hf",
-                             "CodeLLaMa-34b-Instruct-hf",
-                             "deepseek-coder-6.7b-instruct"
-                         ],
+                         choices=["gpt-3.5-turbo-0125", "gpt-4-0125-preview", "claude-3-opus-20240228",
+                                  "claude-3-sonnet-20240229", "CodeLLaMa-7b-Instruct-hf",
+                                  "CodeLLaMa-13b-Instruct-hf", "CodeLLaMa-34b-Instruct-hf",
+                                  "deepseek-coder-6.7b-instruct"],
                          help="Name of the model to use")
     required.add_argument("--system", required=True, type=str,
                          help="Software System name for processing")
@@ -318,7 +288,6 @@ def main() -> None:
     
     Sets up logging and executes the configuration analysis pipeline.
     """
-    args = None
     try:
         args = parse_arguments()
         
@@ -329,9 +298,7 @@ def main() -> None:
         process_files(args)
         
     except Exception as e:
-        # Guard against args being None if parse_arguments() itself fails
-        verbose = args.verbose if args is not None else False
-        logger.error(f"Ciri Engine failed: {str(e)}", exc_info=verbose)
+        logger.error(f"Ciri Engine failed: {str(e)}", exc_info=args.verbose)
         raise
     finally:
         # Clean up logging handlers

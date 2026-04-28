@@ -1,0 +1,33 @@
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```

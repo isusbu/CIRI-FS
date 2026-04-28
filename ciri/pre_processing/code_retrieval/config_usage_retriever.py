@@ -7,6 +7,13 @@ from ciri.pre_processing.code_retrieval.code_crawler import CodeCrawler
 class ConfigUsageRetriever:
 	"""Retrieves and caches configuration parameter usage from code."""
 
+	FORMAT_ALIASES = {
+		"xml": "xml",
+		"kv": "kv",
+		"conf": "kv",
+		"properties": "kv",
+	}
+
 	def __init__(self, system: str, read_code_loc: str, config_format: str, language: str) -> None:
 		"""
 		Initialize the config usage retriever.
@@ -17,12 +24,13 @@ class ConfigUsageRetriever:
 			config_format: Format of config files ('xml' or 'kv')
 			language: Programming language to search in
 		"""
-		if config_format not in ["xml", "kv"]:
+		normalized_format = self.FORMAT_ALIASES.get(config_format)
+		if normalized_format is None:
 			raise ValueError(f"Unsupported config format: {config_format}")
 
 		self.system = system
 		self.read_code_loc = read_code_loc
-		self.config_format = config_format
+		self.config_format = normalized_format
 		self.language = language
 		self.cur_path = Path(os.path.dirname(os.path.abspath(__file__)))
 		self.code_crawler = CodeCrawler(read_code_loc, language)
@@ -42,7 +50,11 @@ class ConfigUsageRetriever:
 			if cache_file.stat().st_size == 0:
 				return None
 			return cache_file.read_text().strip()
-		return None
+
+		usage = self.code_crawler.retrieve_code(param)
+		cache_file.parent.mkdir(parents=True, exist_ok=True)
+		cache_file.write_text((usage or "").strip())
+		return usage
 
 	def _extract_param_from_xml(self, line: str) -> Optional[str]:
 		"""Extract parameter name from XML line."""

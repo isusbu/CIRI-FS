@@ -256,10 +256,10 @@ def parse_arguments() -> argparse.Namespace:
                        choices=["random", "similarity"],
                        help="Shot selection strategy")
     parser.add_argument("--file_format", type=str, default="xml",
-                       choices=["xml", "yaml", "properties", "conf"],
+                       choices=["xml", "yaml", "properties", "conf", "kv"],
                        help="Configuration file format")
     parser.add_argument("--language", type=str, default="java",
-                       choices=["java", "python", "cpp"],
+                       choices=["java", "python", "cpp", "c"],
                        help="Project programming language")
     parser.add_argument("--read_code", action="store_true",
                        help="Enable code reading for configuration")

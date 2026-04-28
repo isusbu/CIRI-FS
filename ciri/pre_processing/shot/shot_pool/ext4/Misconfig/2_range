@@ -1,0 +1,36 @@
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```

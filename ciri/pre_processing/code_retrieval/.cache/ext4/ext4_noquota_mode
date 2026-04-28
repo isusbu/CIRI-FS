@@ -1,0 +1,1 @@
+if (strcmp("ext4_quota_enabled", "ext4_quota_enabled") == 0 && ext4_quota_enabled && ext4_noquota_mode) printf("invalid: ext4_quota_enabled conflicts with ext4_noquota_mode\n");

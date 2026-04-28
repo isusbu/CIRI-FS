@@ -40,7 +40,7 @@ class CodeCrawler:
 			"grep",
 			"-rh",
 			f"--include=*.{extension}",
-			f'"{param}"',
+			param,
 			self.repo_loc
 		]
 

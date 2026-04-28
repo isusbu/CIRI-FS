@@ -1,0 +1,1 @@
+if (strcmp(key, "ext4_journal_size") == 0 && ext4_journal_size >= ext4_total_blocks) printf("invalid: ext4_journal_size must be smaller than ext4_total_blocks\n");

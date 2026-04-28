@@ -23,9 +23,10 @@ class AnswerParser:
 			return False
 
 		if len(error_properties) != len(reasons):
-			print("The length of the error properties and the reasons are not the same.")
+			logger.debug("The length of error properties and reasons is not the same.")
+			return False
 
-		return all(isinstance(ep, str) for ep in error_properties)
+		return all(isinstance(ep, str) for ep in error_properties) and all(isinstance(reason, str) for reason in reasons)
 
 	def inspector(self, candidate):
 		if "hasError" not in candidate:

@@ -1,0 +1,1 @@
+if (strcmp("ext4_encrypt_key_provider", "ext4_encrypt_key_provider") == 0 && ext4_encrypt && strcmp(ext4_encrypt_key_provider, "none") == 0) printf("invalid: ext4_encrypt_key_provider cannot be 'none' when encryption is enabled\n");

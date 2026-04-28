@@ -59,12 +59,19 @@ def _run_analysis(llm_gen) -> tuple[str, Optional[dict[str, str]]]:
         reasons = {}
         raw_answers = answer_parser.answer_pool.pool
         for param in pure_result[0]:
-            reason_list = [
-                answer["reason"][answer["errParameter"].index(param)]
-                for answer in raw_answers
-                if set(answer["errParameter"]) == set(pure_result[0])
-            ]
-            reasons[param] = get_dominant_reason(reason_list)
+            reason_list = []
+            for answer in raw_answers:
+                if set(answer.get("errParameter", [])) != set(pure_result[0]):
+                    continue
+
+                if param not in answer.get("errParameter", []):
+                    continue
+
+                idx = answer["errParameter"].index(param)
+                if idx < len(answer.get("reason", [])):
+                    reason_list.append(answer["reason"][idx])
+
+            reasons[param] = get_dominant_reason(reason_list) if reason_list else "No stable reason was returned by the model."
             
         result = (
             f"There are {len(pure_result[0])} misconfiguration parameters in the input: "

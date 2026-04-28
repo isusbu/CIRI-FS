@@ -1,0 +1,38 @@
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```

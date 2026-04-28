@@ -1,0 +1,1 @@
+if (strcmp("ext4_auto_commit_interval", "ext4_auto_commit_interval") == 0 && ext4_delalloc && ext4_auto_commit_interval == 0) printf("invalid: ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled\n");

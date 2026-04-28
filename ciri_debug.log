@@ -1,0 +1,2451 @@
+2026-04-13 15:08:57 - Ciri - INFO - Selected misconfiguration shots: [2, 3, 1]
+2026-04-13 15:08:57 - Ciri - INFO - Selected valid configuration shots: [2]
+2026-04-13 15:27:52 - Ciri - INFO - Selected misconfiguration shots: [3, 2, 1]
+2026-04-13 15:27:52 - Ciri - INFO - Selected valid configuration shots: [1]
+2026-04-13 15:39:29 - Ciri - INFO - Selected misconfiguration shots: [1, 2, 3]
+2026-04-13 15:39:29 - Ciri - INFO - Selected valid configuration shots: [2]
+2026-04-13 15:42:57 - Ciri - INFO - Selected misconfiguration shots: [1, 3, 2]
+2026-04-13 15:42:57 - Ciri - INFO - Selected valid configuration shots: [1]
+2026-04-13 15:43:06 - Ciri - ERROR - Ciri Engine failed: list index out of range
+2026-04-13 15:44:03 - Ciri - INFO - Selected misconfiguration shots: [3, 1, 2]
+2026-04-13 15:44:03 - Ciri - INFO - Selected valid configuration shots: [1]
+2026-04-13 15:45:14 - Ciri - INFO - Selected misconfiguration shots: [3, 2, 1]
+2026-04-13 15:45:14 - Ciri - INFO - Selected valid configuration shots: [3]
+2026-04-13 15:46:47 - Ciri - INFO - Selected misconfiguration shots: [1, 3, 2]
+2026-04-13 15:46:47 - Ciri - INFO - Selected valid configuration shots: [3]
+2026-04-13 17:27:12 - Ciri - DEBUG - Processing file: ciri/input/sample_input/ext4_ex.conf
+2026-04-13 17:27:12 - Ciri - INFO - Selected misconfiguration shots: [3, 2, 1]
+2026-04-13 17:27:12 - Ciri - INFO - Selected valid configuration shots: [3]
+2026-04-13 17:27:12 - Ciri - DEBUG - [Ciri] Complete shot content:
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Encryption disabled - safe
+ext4_encrypt=false
+
+# Checksums with 64-bit mode enabled - compatible
+ext4_metadata_csum=true
+ext4_64bit_mode=true
+
+# Journal size smaller than filesystem
+ext4_journal_size=1024
+ext4_total_blocks=100000
+
+# Quota enabled with compatible options
+ext4_quota_enabled=true
+ext4_noquota_mode=false
+
+# Delayed allocation with proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=5
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+
+2026-04-13 17:27:12 - Ciri - DEBUG - Prepared content:
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Encryption disabled - safe
+ext4_encrypt=false
+
+# Checksums with 64-bit mode enabled - compatible
+ext4_metadata_csum=true
+ext4_64bit_mode=true
+
+# Journal size smaller than filesystem
+ext4_journal_size=1024
+ext4_total_blocks=100000
+
+# Quota enabled with compatible options
+ext4_quota_enabled=true
+ext4_noquota_mode=false
+
+# Delayed allocation with proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=5
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+ext4_encrypt_key_provider=none
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+# Usage: const char *journal_size_key = "ext4_journal_size";
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+# Usage: const char *quota_key = "ext4_quota_enabled";
+ext4_noquota_mode=true
+# Usage: const char *noquota_key = "ext4_noquota_mode";
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+# Usage: const char *auto_commit_key = "ext4_auto_commit_interval";
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Encryption disabled - safe
+ext4_encrypt=false
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Checksums with 64-bit mode enabled - compatible
+ext4_metadata_csum=true
+ext4_64bit_mode=true
+
+# Journal size smaller than filesystem
+ext4_journal_size=1024
+# Usage: const char *journal_size_key = "ext4_journal_size";
+ext4_total_blocks=100000
+
+# Quota enabled with compatible options
+ext4_quota_enabled=true
+# Usage: const char *quota_key = "ext4_quota_enabled";
+ext4_noquota_mode=false
+# Usage: const char *noquota_key = "ext4_noquota_mode";
+
+# Delayed allocation with proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=5
+# Usage: const char *auto_commit_key = "ext4_auto_commit_interval";
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+# Usage: const char *journal_size_key = "ext4_journal_size";
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+# Usage: const char *quota_key = "ext4_quota_enabled";
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+# Usage: const char *noquota_key = "ext4_noquota_mode";
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+# Usage: const char *auto_commit_key = "ext4_auto_commit_interval";
+2026-04-13 17:27:24 - Ciri - DEBUG - Raw json:
+2026-04-13 17:27:24 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "Encryption is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "Quota is enabled but 'ext4_noquota_mode' is also true. These options are mutually exclusive.", "Noquota mode is true but conflicts with 'ext4_quota_enabled'.", 'Auto commit interval cannot be 0 when delayed allocation is enabled.']}
+2026-04-13 17:27:24 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "Encryption is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "Quota is enabled but 'ext4_noquota_mode' is also true. These options are mutually exclusive.", "The property 'ext4_noquota_mode' conflicts with 'ext4_quota_enabled'.", "The property 'ext4_auto_commit_interval' cannot be 0 when delayed allocation is enabled."]}
+2026-04-13 17:27:24 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "Encryption is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "Quota is enabled but conflicts with 'ext4_noquota_mode' which is also true. These options are mutually exclusive.", "The property 'ext4_noquota_mode' is set to true, conflicting with 'ext4_quota_enabled'.", "Delayed allocation is enabled but 'ext4_auto_commit_interval' is set to 0 which is not allowed."]}
+2026-04-14 14:16:21 - Ciri - DEBUG - Processing file: ciri/input/sample_input/ext4_ex.conf
+2026-04-14 14:16:21 - Ciri - INFO - Selected misconfiguration shots: [3, 2, 1]
+2026-04-14 14:16:21 - Ciri - INFO - Selected valid configuration shots: [2]
+2026-04-14 14:16:21 - Ciri - DEBUG - [Ciri] Complete shot content:
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Directory hash version - valid
+ext4_dir_hash_version=2
+
+# Orphan inode count - valid positive value
+ext4_orphan_inode_count=10
+
+# Group descriptors per block - valid
+ext4_desc_per_block=8
+
+# Commit timeout - within valid range (in seconds)
+ext4_commit_timeout=5
+
+# Blocks per group - valid positive value
+ext4_blocks_per_group=32768
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+
+2026-04-14 14:16:21 - Ciri - DEBUG - Prepared content:
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Directory hash version - valid
+ext4_dir_hash_version=2
+
+# Orphan inode count - valid positive value
+ext4_orphan_inode_count=10
+
+# Group descriptors per block - valid
+ext4_desc_per_block=8
+
+# Commit timeout - within valid range (in seconds)
+ext4_commit_timeout=5
+
+# Blocks per group - valid positive value
+ext4_blocks_per_group=32768
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+
+2026-04-14 14:16:25 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:25 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:28 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:28 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:31 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:31 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:33 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:33 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:36 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:36 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:40 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:40 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:42 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:42 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:47 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:47 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:49 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:49 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:52 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:52 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:55 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:55 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:16:58 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:16:58 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:00 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:00 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:03 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:03 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:06 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:06 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:08 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:08 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:11 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:11 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:14 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:14 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:16 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:16 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:18 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:18 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:21 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:21 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:24 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:24 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than the filesystem size.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:27 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:27 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:30 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:30 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:32 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:32 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:35 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:35 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:38 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:38 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:40 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:40 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:43 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:43 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:46 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:46 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:48 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:48 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:51 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:51 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:54 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:54 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:56 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:56 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:17:59 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:17:59 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:03 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:03 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:05 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:05 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:08 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:08 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:11 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:11 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:13 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:13 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:16 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:16 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:19 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:19 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:22 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:22 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:25 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:25 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:28 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:28 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:30 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:30 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:33 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:33 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:35 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:35 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:37 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:37 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:39 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:39 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:42 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:42 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than the filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:43 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:43 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:48 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:18:48 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_journal_size", "ext4_encrypt_key_provider", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:18:52 - Ciri - DEBUG - Raw json:
+2026-04-14 14:18:52 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ['ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.', "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", 'ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.', 'ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.', 'ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled.']}
+2026-04-14 14:18:52 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ['ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.', "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", 'ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.', 'ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.', 'ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled.']}
+2026-04-14 14:18:52 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ['ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.', "ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", 'ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.', 'ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.', 'ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled.']}
+2026-04-14 14:21:05 - Ciri - DEBUG - Processing file: ciri/input/sample_input/ext4_ex.conf
+2026-04-14 14:21:05 - Ciri - INFO - Selected misconfiguration shots: [2, 1, 3]
+2026-04-14 14:21:05 - Ciri - INFO - Selected valid configuration shots: [1]
+2026-04-14 14:21:05 - Ciri - DEBUG - [Ciri] Complete shot content:
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Journal mode - valid option
+ext4_journal_mode=ordered
+
+# Block size - valid power of 2
+ext4_block_size=4096
+
+# Inode ratio - valid positive integer
+ext4_inode_ratio=16384
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=4096
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+
+2026-04-14 14:21:05 - Ciri - DEBUG - Prepared content:
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Journal mode - valid option
+ext4_journal_mode=ordered
+
+# Block size - valid power of 2
+ext4_block_size=4096
+
+# Inode ratio - valid positive integer
+ext4_inode_ratio=16384
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=4096
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+ext4_encrypt_key_provider=none
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+# Usage: const char *journal_size_key = "ext4_journal_size";
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+# Usage: const char *quota_key = "ext4_quota_enabled";
+ext4_noquota_mode=true
+# Usage: const char *noquota_key = "ext4_noquota_mode";
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+# Usage: const char *auto_commit_key = "ext4_auto_commit_interval";
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Journal mode - valid option
+ext4_journal_mode=ordered
+
+# Block size - valid power of 2
+ext4_block_size=4096
+
+# Inode ratio - valid positive integer
+ext4_inode_ratio=16384
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=4096
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+# Usage: const char *journal_size_key = "ext4_journal_size";
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+# Usage: const char *quota_key = "ext4_quota_enabled";
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+# Usage: const char *noquota_key = "ext4_noquota_mode";
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+# Usage: const char *auto_commit_key = "ext4_auto_commit_interval";
+2026-04-14 14:21:15 - Ciri - DEBUG - Raw json:
+2026-04-14 14:21:15 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "The property 'ext4_encrypt_key_provider' is set to 'none' while encryption is enabled. A valid key provider must be configured.", "The properties 'ext4_quota_enabled' and 'ext4_noquota_mode' are conflicting. They are mutually exclusive options.", "The property 'ext4_auto_commit_interval' cannot be 0 when delayed allocation is enabled."]}
+2026-04-14 14:21:15 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "ext4_encrypt is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "ext4_quota_enabled is true but 'ext4_noquota_mode' is also true. These options are mutually exclusive.", 'ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled.']}
+2026-04-14 14:21:15 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "The property 'ext4_encrypt' is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "The property 'ext4_quota_enabled' is true but 'ext4_noquota_mode' is also true. These options are mutually exclusive.", "The property 'ext4_auto_commit_interval' cannot be 0 when delayed allocation is enabled."]}
+2026-04-14 14:42:41 - Ciri - DEBUG - Processing file: ciri/input/sample_input/ext4_ex.conf
+2026-04-14 14:42:41 - Ciri - INFO - Selected misconfiguration shots: [1, 3, 2]
+2026-04-14 14:42:41 - Ciri - INFO - Selected valid configuration shots: [1]
+2026-04-14 14:42:41 - Ciri - DEBUG - [Ciri] Complete shot content:
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Journal mode - valid option
+ext4_journal_mode=ordered
+
+# Block size - valid power of 2
+ext4_block_size=4096
+
+# Inode ratio - valid positive integer
+ext4_inode_ratio=16384
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=4096
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+
+2026-04-14 14:42:41 - Ciri - DEBUG - Prepared content:
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+ext4_encrypt_key_provider=none
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+ext4_noquota_mode=true
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Journal mode - valid option
+ext4_journal_mode=ordered
+
+# Block size - valid power of 2
+ext4_block_size=4096
+
+# Inode ratio - valid positive integer
+ext4_inode_ratio=16384
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=4096
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+# ext4 filesystem configuration
+
+# Journal mode - invalid value type
+ext4_journal_mode=invalid_mode
+
+# Block size - must be power of 2
+ext4_block_size=1000
+
+# Inode ratio - must be positive integer
+ext4_inode_ratio=abc
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=512
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_journal_mode", "ext4_block_size", "ext4_inode_ratio"],
+    "reason": ["The property 'ext4_journal_mode' has an invalid value 'invalid_mode'. Valid options are: writeback, ordered, journal.", "The property 'ext4_block_size' must be a power of 2 (1024, 2048, 4096, etc.), got 1000.", "The property 'ext4_inode_ratio' has the value 'abc' which is not of the correct type Integer."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Encryption enabled but key management not configured
+ext4_encrypt=true
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+ext4_encrypt_key_provider=none
+# Usage: if (strcmp("ext4_encrypt_key_provider", "ext4_encrypt_key_provider") == 0 && ext4_encrypt && strcmp(ext4_encrypt_key_provider, "none") == 0) printf("invalid: ext4_encrypt_key_provider cannot be 'none' when encryption is enabled\n");
+
+# Checksums required but incompatible
+ext4_metadata_csum=true
+ext4_64bit_mode=false
+
+# Journal size dependency - journal size larger than filesystem
+ext4_journal_size=99999
+# Usage: if (strcmp(key, "ext4_journal_size") == 0 && ext4_journal_size >= ext4_total_blocks) printf("invalid: ext4_journal_size must be smaller than ext4_total_blocks\n");
+ext4_total_blocks=1000
+
+# Quota enabled with conflicting options
+ext4_quota_enabled=true
+# Usage: if (strcmp("ext4_quota_enabled", "ext4_quota_enabled") == 0 && ext4_quota_enabled && ext4_noquota_mode) printf("invalid: ext4_quota_enabled conflicts with ext4_noquota_mode\n");
+ext4_noquota_mode=true
+# Usage: if (strcmp("ext4_quota_enabled", "ext4_quota_enabled") == 0 && ext4_quota_enabled && ext4_noquota_mode) printf("invalid: ext4_quota_enabled conflicts with ext4_noquota_mode\n");
+
+# Delayed allocation without proper journal settings
+ext4_delalloc=true
+ext4_auto_commit_interval=0
+# Usage: if (strcmp("ext4_auto_commit_interval", "ext4_auto_commit_interval") == 0 && ext4_delalloc && ext4_auto_commit_interval == 0) printf("invalid: ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled\n");
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_64bit_mode", "ext4_journal_size", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_metadata_csum requires 64-bit mode to be enabled but ext4_64bit_mode is false.", "ext4_journal_size (99999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+}
+```
+
+# ext4 filesystem configuration
+
+# Maximum file size - out of range
+ext4_max_file_size=9999999999999999999
+
+# Directory hash version
+ext4_dir_hash_version=4
+
+# Orphan inode count - negative value
+ext4_orphan_inode_count=-5
+
+# Group descriptors per block
+ext4_desc_per_block=16
+
+# Commit timeout - exceeds max value
+ext4_commit_timeout=32768
+
+# Blocks per group - out of range
+ext4_blocks_per_group=0
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": true,
+    "errParameter": ["ext4_max_file_size", "ext4_orphan_inode_count", "ext4_commit_timeout", "ext4_blocks_per_group"],
+    "reason": ["The property 'ext4_max_file_size' exceeds the maximum allowed value for ext4 (16TB).", "The property 'ext4_orphan_inode_count' has value -5 which cannot be negative.", "The property 'ext4_commit_timeout' has value 32768 which exceeds the maximum allowed value of 32400.", "The property 'ext4_blocks_per_group' must be greater than 0."]
+}
+```
+
+# ext4 filesystem configuration - Valid Config
+
+# Journal mode - valid option
+ext4_journal_mode=ordered
+
+# Block size - valid power of 2
+ext4_block_size=4096
+
+# Inode ratio - valid positive integer
+ext4_inode_ratio=16384
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Stripe width alignment
+ext4_stripe_width=4096
+
+
+Question: Are there any mistakes in the above configuration file for ext4 version 4.18? Respond in a json format similar to the following:
+{
+    "hasError": boolean, // true if there are errors, false if there are none
+    "errParameter": [], // List containing properties with errors. If there are no errors, leave this as an empty array
+    "reason": [] // List containing explanations for each error. If there are no errors, leave this as an empty array
+}
+
+Answer:
+```json
+{
+    "hasError": false,
+    "errParameter": [],
+    "reason": []
+}
+```
+
+# ext4 Filesystem Configuration Example
+
+# Journal mode setting
+ext4_journal_mode=writeback
+
+# Block size (must be power of 2: 1024, 2048, 4096)
+ext4_block_size=2048
+
+# Inode ratio (number of bytes per inode)
+ext4_inode_ratio=16384
+
+# Directory hash version
+ext4_dir_hash_version=2
+
+# Metadata checksums
+ext4_metadata_csum=true
+
+# 64-bit mode support
+ext4_64bit_mode=true
+
+# Maximum file size
+ext4_max_file_size=16000000000
+
+# Orphan inode count
+ext4_orphan_inode_count=5
+
+# Commit timeout (seconds)
+ext4_commit_timeout=5
+
+# Blocks per group
+ext4_blocks_per_group=32768
+
+# Mount options
+ext4_mount_options=errors=remount-ro,data=ordered
+
+# Journal size - INTENTIONAL ERROR: exceeds total_blocks
+ext4_journal_size=999999
+# Usage: if (strcmp(key, "ext4_journal_size") == 0 && ext4_journal_size >= ext4_total_blocks) printf("invalid: ext4_journal_size must be smaller than ext4_total_blocks\n");
+
+# Total blocks in filesystem
+ext4_total_blocks=1000
+
+# Encryption enabled with missing key provider - INTENTIONAL ERROR
+ext4_encrypt=true
+# Usage: const char *encrypt_key_provider_key = "ext4_encrypt_key_provider";
+
+# Encryption key provider - INTENTIONAL ERROR: should have valid provider, not 'none'
+ext4_encrypt_key_provider=none
+# Usage: if (strcmp("ext4_encrypt_key_provider", "ext4_encrypt_key_provider") == 0 && ext4_encrypt && strcmp(ext4_encrypt_key_provider, "none") == 0) printf("invalid: ext4_encrypt_key_provider cannot be 'none' when encryption is enabled\n");
+
+# Quota enabled - INTENTIONAL ERROR: conflicts with noquota_mode
+ext4_quota_enabled=true
+# Usage: if (strcmp("ext4_quota_enabled", "ext4_quota_enabled") == 0 && ext4_quota_enabled && ext4_noquota_mode) printf("invalid: ext4_quota_enabled conflicts with ext4_noquota_mode\n");
+
+# Noquota mode - INTENTIONAL ERROR: mutually exclusive with quota_enabled
+ext4_noquota_mode=true
+# Usage: if (strcmp("ext4_quota_enabled", "ext4_quota_enabled") == 0 && ext4_quota_enabled && ext4_noquota_mode) printf("invalid: ext4_quota_enabled conflicts with ext4_noquota_mode\n");
+
+# Delayed allocation
+ext4_delalloc=true
+
+# Auto commit interval - INTENTIONAL ERROR: can't be 0 with delayed allocation
+ext4_auto_commit_interval=0
+# Usage: if (strcmp("ext4_auto_commit_interval", "ext4_auto_commit_interval") == 0 && ext4_delalloc && ext4_auto_commit_interval == 0) printf("invalid: ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled\n");
+2026-04-14 14:42:50 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:42:50 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_journal_size", "ext4_encrypt", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_encrypt is enabled but ext4_encrypt_key_provider is not specified.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:42:53 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:42:53 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_journal_size", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:42:57 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:42:57 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_journal_size", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than the filesystem size.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:43:04 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:43:04 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_journal_size", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:43:07 - Ciri - DEBUG - The length of error properties and reasons is not the same.
+2026-04-14 14:43:07 - Ciri - DEBUG - Error: {
+    "hasError": true,
+    "errParameter": ["ext4_encrypt_key_provider", "ext4_journal_size", "ext4_quota_enabled", "ext4_noquota_mode", "ext4_auto_commit_interval"],
+    "reason": ["ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.", "ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than the total blocks in the filesystem.", "ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.", "ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled."]
+} is not a valid answer.
+2026-04-14 14:43:10 - Ciri - DEBUG - Raw json:
+2026-04-14 14:43:10 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "Encryption is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "Quota is enabled but conflicts with 'ext4_noquota_mode'.", "'ext4_noquota_mode' is set to true, which conflicts with 'ext4_quota_enabled'.", "The property 'ext4_auto_commit_interval' cannot be 0 when delayed allocation is enabled."]}
+2026-04-14 14:43:10 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_journal_size', 'ext4_encrypt_key_provider', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_journal_size' (999999 blocks) exceeds 'ext4_total_blocks' (1000 blocks). Journal size must be smaller than the filesystem size.", "Encryption is enabled but 'ext4_encrypt_key_provider' is set to 'none'. A valid key provider must be configured.", "Quota is enabled but conflicts with 'ext4_noquota_mode' which is also true. These options are mutually exclusive.", "Noquota mode is enabled but conflicts with 'ext4_quota_enabled' which is also true. These options are mutually exclusive.", 'Auto commit interval cannot be 0 when delayed allocation is enabled.']}
+2026-04-14 14:43:10 - Ciri - DEBUG - {'hasError': True, 'errParameter': ['ext4_encrypt_key_provider', 'ext4_journal_size', 'ext4_quota_enabled', 'ext4_noquota_mode', 'ext4_auto_commit_interval'], 'reason': ["The property 'ext4_encrypt_key_provider' has an invalid value 'none'. A valid key provider must be configured when encryption is enabled.", "The property 'ext4_journal_size' (999999 blocks) exceeds the total blocks in the filesystem. Journal size must be smaller than the total blocks.", "The property 'ext4_quota_enabled' is true but conflicts with 'ext4_noquota_mode' which is also true. These options are mutually exclusive.", "The property 'ext4_noquota_mode' is true but conflicts with 'ext4_quota_enabled' which is also true. These options are mutually exclusive.", "The property 'ext4_auto_commit_interval' cannot be 0 when delayed allocation is enabled."]}
+2026-04-14 14:45:31 - Ciri - INFO - Selected misconfiguration shots: [1, 3, 2]
+2026-04-14 14:45:31 - Ciri - INFO - Selected valid configuration shots: [2]
+2026-04-14 14:47:53 - Ciri - INFO - Selected misconfiguration shots: [1, 3, 2]
+2026-04-14 14:47:53 - Ciri - INFO - Selected valid configuration shots: [1]

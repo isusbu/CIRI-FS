@@ -1,0 +1,10 @@
+[Ciri] Start
+[Ciri] Running for file ciri/output/sample_output/ext4_without_code_retrieval.conf
+[Ciri] Result: There are 5 misconfiguration parameters in the input: ext4_journal_size	ext4_encrypt_key_provider	ext4_quota_enabled	ext4_noquota_mode	ext4_auto_commit_interval
+[Ciri] Reason for ext4_journal_size: ext4_journal_size (999999 blocks) exceeds ext4_total_blocks (1000 blocks). Journal size must be smaller than filesystem.
+[Ciri] Reason for ext4_encrypt_key_provider: ext4_encrypt is enabled but ext4_encrypt_key_provider is set to 'none'. A valid key provider must be configured.
+[Ciri] Reason for ext4_quota_enabled: ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.
+[Ciri] Reason for ext4_noquota_mode: ext4_quota_enabled is true but ext4_noquota_mode is also true. These options are mutually exclusive.
+[Ciri] Reason for ext4_auto_commit_interval: ext4_auto_commit_interval cannot be 0 when delayed allocation is enabled.
+[Ciri] Writing log file to ciri/output/sample_output/ext4_without_code_retrieval.conf
+[Ciri] End

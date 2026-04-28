@@ -1,0 +1,5 @@
+Final result:
+
+There are 1 misconfiguration parameters in the input: s_first_meta_bg
+
+Reason for s_first_meta_bg: The property 's_first_meta_bg' is not a valid property for ext4 version 1.47.0.

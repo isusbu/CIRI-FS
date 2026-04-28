@@ -3,7 +3,7 @@ import os
 from typing import List, Optional, Tuple, Dict, Any
 
 # Global constants
-PRINT_TO_CONSOLE = False
+PRINT_TO_CONSOLE = True
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 GROUND_TRUTH_PATH = os.path.join(SCRIPT_PATH, "..", "datasets", "synthesize_config", "ground_truth")
 RESULTS_PATH = os.path.join(SCRIPT_PATH, "..", "results", "synthesize_config")

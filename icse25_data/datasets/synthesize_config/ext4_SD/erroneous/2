@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+  <name>e2fsck.discard_end_group</name>
+  <value>-1</value>
+  <description>Controls the end group index for discard operations in e2fsck.</description>
+</property>
+
+<property>
+  <name>e2fsck.max_iterations</name>
+  <value>10</value>
+  <description>Maximum number of iterations for e2fsck pass operations.</description>
+</property>
+
+<property>
+  <name>e2fsck.log_level</name>
+  <value>1</value>
+  <description>Logging verbosity level for e2fsck operations.</description>
+</property>
+</configuration>

@@ -1,0 +1,9 @@
+Final result:
+
+There are 3 misconfiguration parameters in the input: mke2fs.blocksize	mke2fs.inode_size	mke2fs.inode_ratio
+
+Reason for mke2fs.blocksize: Invalid value for mke2fs.blocksize. Valid values are 1024, 2048, and 4096.
+
+Reason for mke2fs.inode_size: Invalid value for mke2fs.inode_size. The recommended inode size for ext4 is 128 bytes.
+
+Reason for mke2fs.inode_ratio: Invalid value for mke2fs.inode_ratio. The recommended bytes per inode ratio for ext4 is 4096.

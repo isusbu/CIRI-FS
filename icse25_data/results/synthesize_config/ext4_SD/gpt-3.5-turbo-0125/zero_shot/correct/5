@@ -1,0 +1,7 @@
+Final result:
+
+There are 2 misconfiguration parameters in the input: ext4.s_raid_stride	ext4.s_raid_stripe_width
+
+Reason for ext4.s_raid_stride: RAID stride size should be a positive integer value.
+
+Reason for ext4.s_raid_stripe_width: RAID stripe width should be a positive integer value.

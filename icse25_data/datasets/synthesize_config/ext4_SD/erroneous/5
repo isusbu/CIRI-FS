@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+  <name>ext4.s_first_meta_bg</name>
+  <value>65536</value>
+  <description>Index of the first block group using meta_bg layout. Used during filesystem validation.</description>
+</property>
+
+<property>
+  <name>ext4.s_raid_stride</name>
+  <value>0</value>
+  <description>RAID stride size in filesystem blocks.</description>
+</property>
+
+<property>
+  <name>ext4.s_raid_stripe_width</name>
+  <value>0</value>
+  <description>RAID stripe width in filesystem blocks.</description>
+</property>
+</configuration>

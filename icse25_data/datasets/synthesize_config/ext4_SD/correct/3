@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+  <name>mke2fs.blocksize</name>
+  <value>4096</value>
+  <description>The block size of the filesystem in bytes. Valid values are 1024, 2048, and 4096.</description>
+</property>
+
+<property>
+  <name>mke2fs.inode_size</name>
+  <value>256</value>
+  <description>The size of each inode in bytes.</description>
+</property>
+
+<property>
+  <name>mke2fs.inode_ratio</name>
+  <value>16384</value>
+  <description>The bytes per inode ratio used when creating the filesystem.</description>
+</property>
+</configuration>

@@ -1,0 +1,5 @@
+Range	Basic Numeric	s_first_meta_bg	99999999
+Range	Basic Numeric	e2fsck.discard_end_group	-1
+Range	Basic Numeric	mke2fs.blocksize	999999
+Range	Basic Numeric	ext4.s_log_block_size	-1
+Range	Basic Numeric	ext4.s_first_meta_bg	65536

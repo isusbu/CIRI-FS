@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+  <name>ext4.s_log_block_size</name>
+  <value>2</value>
+  <description>The block size expressed as a power of 2. Value of 0 means 1024 bytes, 1 means 2048 bytes, 2 means 4096 bytes.</description>
+</property>
+
+<property>
+  <name>ext4.s_log_cluster_size</name>
+  <value>2</value>
+  <description>The cluster size expressed as a power of 2 for bigalloc feature.</description>
+</property>
+
+<property>
+  <name>ext4.s_blocks_per_group</name>
+  <value>32768</value>
+  <description>Number of blocks per block group in the filesystem.</description>
+</property>
+</configuration>

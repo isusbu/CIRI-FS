@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+  <name>s_first_meta_bg</name>
+  <value>10</value>
+  <description>Index of the first block group using the meta_bg layout.</description>
+</property>
+
+<property>
+  <name>mke2fs.blocksize</name>
+  <value>4096</value>
+  <description>The block size of the filesystem in bytes.</description>
+</property>
+
+<property>
+  <name>mke2fs.inode_size</name>
+  <value>256</value>
+  <description>The size of each inode in bytes.</description>
+</property>
+</configuration>

@@ -1,0 +1,9 @@
+Final result:
+
+There are 3 misconfiguration parameters in the input: e2fsck.discard_end_group	e2fsck.max_iterations	e2fsck.log_level
+
+Reason for e2fsck.discard_end_group: Invalid property 'e2fsck.discard_end_group' for ext4 version 1.47.0.
+
+Reason for e2fsck.max_iterations: Invalid property 'e2fsck.max_iterations' for ext4 version 1.47.0.
+
+Reason for e2fsck.log_level: Invalid property 'e2fsck.log_level' for ext4 version 1.47.0.

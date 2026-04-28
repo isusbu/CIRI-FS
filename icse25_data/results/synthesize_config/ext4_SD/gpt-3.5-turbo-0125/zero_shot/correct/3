@@ -1,0 +1,7 @@
+Final result:
+
+There are 2 misconfiguration parameters in the input: mke2fs.inode_size	mke2fs.inode_ratio
+
+Reason for mke2fs.inode_size: The value of 'mke2fs.inode_size' should be a multiple of 128 for ext4 filesystems.
+
+Reason for mke2fs.inode_ratio: The value of 'mke2fs.inode_ratio' should be a power of 2 for ext4 filesystems.

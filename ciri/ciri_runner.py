@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 from pathlib import Path
 
 from ciri.post_processing import selection
-from ciri.query.llm_gen import GPTGen, ClaudeGen, LlamaGen, DeepseekGen
+from ciri.query.llm_gen import GPTGen, ClaudeGen, LlamaGen, DeepseekGen, QwenGen
 from ciri.ciri_logger import logger
 from ciri.post_processing.reason_cluster import get_dominant_reason
 
@@ -22,6 +22,8 @@ def _get_llm_generator(args: Dict, file_content: str, model, tokenizer):
         return LlamaGen(args, file_content, model, tokenizer)
     elif args.model.startswith("deepseek"):
         return DeepseekGen(args, file_content, model, tokenizer)
+    elif args.model.startswith("Qwen"):
+        return QwenGen(args, file_content, model, tokenizer)
     else:
         raise ValueError(f"Model {args.model} is not supported")
 

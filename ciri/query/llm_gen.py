@@ -175,3 +175,54 @@ class DeepseekGen(BaseGen):
         for output in outputs:
             answerList.append(self.tokenizer.decode(output[input_len:-1], skip_special_tokens=True))
         return answerList
+
+
+class QwenGen(BaseGen):
+    def __init__(self, args: Dict, config_file: str, model, tokenizer):
+        super().__init__(args, config_file)
+        self.llm_model = model
+        self.tokenizer = tokenizer
+        self.device = get_device()
+
+    def _generate(self) -> List:
+        message = f"{self.config_file}\n{self.prompt}"
+
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": message}
+        ]
+
+        formatted = self.tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+
+        inputs = self.tokenizer(
+            formatted,
+            return_tensors="pt"
+        ).to(self.device)
+
+        input_len = inputs["input_ids"].shape[1]
+
+        with torch.inference_mode():
+            outputs = self.llm_model.generate(
+                **inputs,
+                max_new_tokens=512,
+                do_sample=True,
+                temperature=0.2,
+                pad_token_id=self.tokenizer.pad_token_id,
+                eos_token_id=self.tokenizer.eos_token_id
+            )
+
+        answer_list = []
+        for output in outputs:
+            generated = output[input_len:]
+            answer_list.append(
+                self.tokenizer.decode(
+                    generated,
+                    skip_special_tokens=True
+                ).strip()
+            )
+
+        return answer_list

@@ -134,6 +134,34 @@ def load_language_model(checkpoint: str) -> Tuple[Optional[AutoModelForCausalLM]
                 padding_side='left'
             )
 
+        elif checkpoint.startswith("Qwen"):
+            from transformers import BitsAndBytesConfig
+
+            full_checkpoint = "Qwen/Qwen2.5-Coder-7B-Instruct"
+
+            quantization_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_use_double_quant=True
+            )
+
+            model = AutoModelForCausalLM.from_pretrained(
+                full_checkpoint,
+                quantization_config=quantization_config,
+                device_map="auto",
+                trust_remote_code=True
+            )
+
+            tokenizer = AutoTokenizer.from_pretrained(
+                full_checkpoint,
+                trust_remote_code=True,
+                padding_side="left"
+            )
+
+            if tokenizer.pad_token_id is None:
+                tokenizer.pad_token = tokenizer.eos_token
+
         elif checkpoint.startswith("CodeLLaMa"):
             full_checkpoint = f"codellama/{checkpoint}"
             logger.info(f"Loading CodeLlama model: {full_checkpoint}")
@@ -240,7 +268,16 @@ def process_files(args: argparse.Namespace) -> None:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         if output_path.exists():
             output_path.unlink()
-        process_single_file(args, input_path, output_path)
+
+        model, tokenizer = load_language_model(args.model)
+        update_logger_handler(output_path)
+        process_single_file(
+            args,
+            input_path,
+            output_path,
+            model,
+            tokenizer
+        )
     else:
         raise CiriEngineError(f"Invalid input path: {input_path}")
 
@@ -274,7 +311,7 @@ def parse_arguments() -> argparse.Namespace:
                              "CodeLLaMa-7b-Instruct-hf",
                              "CodeLLaMa-13b-Instruct-hf",
                              "CodeLLaMa-34b-Instruct-hf",
-                             "deepseek-coder-6.7b-instruct"
+                             "deepseek-coder-6.7b-instruct", "Qwen2.5-Coder-7B-Instruct"
                          ],
                          help="Name of the model to use")
     required.add_argument("--system", required=True, type=str,

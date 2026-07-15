@@ -180,16 +180,29 @@ class DeepseekGen(BaseGen):
 class QwenGen(BaseGen):
     def __init__(self, args: Dict, config_file: str, model, tokenizer):
         super().__init__(args, config_file)
+
         self.llm_model = model
         self.tokenizer = tokenizer
         self.device = get_device()
+
+        # Cost measurements for the current configuration file
+        self.total_input_tokens = 0
+        self.total_output_tokens = 0
+        self.total_generation_time = 0.0
+        self.generation_calls = 0
 
     def _generate(self) -> List:
         message = f"{self.config_file}\n{self.prompt}"
 
         messages = [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": message}
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+            },
+            {
+                "role": "user",
+                "content": message
+            }
         ]
 
         formatted = self.tokenizer.apply_chat_template(
@@ -205,6 +218,12 @@ class QwenGen(BaseGen):
 
         input_len = inputs["input_ids"].shape[1]
 
+        # Ensure GPU timing is accurate
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+
+        start_time = time.perf_counter()
+
         with torch.inference_mode():
             outputs = self.llm_model.generate(
                 **inputs,
@@ -215,14 +234,49 @@ class QwenGen(BaseGen):
                 eos_token_id=self.tokenizer.eos_token_id
             )
 
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+
+        elapsed_time = time.perf_counter() - start_time
+
         answer_list = []
+        output_token_count = 0
+
         for output in outputs:
-            generated = output[input_len:]
-            answer_list.append(
-                self.tokenizer.decode(
-                    generated,
-                    skip_special_tokens=True
-                ).strip()
-            )
+            generated_tokens = output[input_len:]
+            output_token_count += generated_tokens.numel()
+
+            answer = self.tokenizer.decode(
+                generated_tokens,
+                skip_special_tokens=True
+            ).strip()
+
+            answer_list.append(answer)
+
+        self.generation_calls += 1
+        self.total_input_tokens += input_len
+        self.total_output_tokens += output_token_count
+        self.total_generation_time += elapsed_time
+
+        logger.info(
+            "[Qwen Cost] "
+            f"call={self.generation_calls}, "
+            f"input_tokens={input_len}, "
+            f"output_tokens={output_token_count}, "
+            f"total_tokens={input_len + output_token_count}, "
+            f"generation_time_seconds={elapsed_time:.4f}"
+        )
+
+        logger.info(
+            "[Qwen Cost Cumulative] "
+            f"calls={self.generation_calls}, "
+            f"input_tokens={self.total_input_tokens}, "
+            f"output_tokens={self.total_output_tokens}, "
+            f"total_tokens="
+            f"{self.total_input_tokens + self.total_output_tokens}, "
+            f"generation_time_seconds="
+            f"{self.total_generation_time:.4f}"
+        )
 
         return answer_list
+
